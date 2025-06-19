@@ -1,5 +1,6 @@
 package org.springboot.trendmartecommerceplatform.user;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +15,7 @@ public class OuthController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public User register(@RequestBody RegisterRequest request) {
+    public User register(@Valid @RequestBody RegisterRequest request) {
         return userService.register(request);
     }
 
