@@ -15,8 +15,13 @@ public class ProductService {
     public List<Product> findAll() {
         return productRepository.findAll();
     }
-    public Product addProduct(Product product) {
-        return productRepository.save(product);
+    public Product addProduct(Dto dto) {
+        Product productToAdd = new Product();
+        productToAdd.setName(dto.getName());
+        productToAdd.setDescription(dto.getDescription());
+        productToAdd.setPrice(dto.getPrice());
+        productToAdd.setImageUrl(dto.getImageUrl());
+        return productRepository.save(productToAdd);
     }
     public Product updateProduct(long id, Dto dto) {          //Edit
        Product product = productRepository.findById(id).orElseThrow();

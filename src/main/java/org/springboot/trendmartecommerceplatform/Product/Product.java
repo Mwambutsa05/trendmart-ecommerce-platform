@@ -10,6 +10,7 @@ import org.springboot.trendmartecommerceplatform.stock.Stock;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -25,6 +26,10 @@ public class Product {
     private String description;
     private BigDecimal price;
     private String imageUrl;
+    private String skuCode;
+    private String brand;
+    @ElementCollection
+    private List<String> urls;
     @CreationTimestamp
     private Date created_at;
 
