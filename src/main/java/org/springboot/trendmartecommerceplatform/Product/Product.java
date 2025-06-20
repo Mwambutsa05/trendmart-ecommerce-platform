@@ -28,6 +28,7 @@ public class Product {
     private String imageUrl;
     private String skuCode;
     private String brand;
+
     @ElementCollection
     private List<String> urls;
     @CreationTimestamp
