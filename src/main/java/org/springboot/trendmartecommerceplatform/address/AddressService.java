@@ -26,7 +26,7 @@ public class AddressService {
         return addressRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
     }
-    public Address getById(Long id) {
+    public Address getById(Long id)  {
         return addressRepository.findById(id).orElseThrow(() -> new RuntimeException("Address not found"));
     }
     public Address updateAddress(Long id,AddressDto Dtoo) {
