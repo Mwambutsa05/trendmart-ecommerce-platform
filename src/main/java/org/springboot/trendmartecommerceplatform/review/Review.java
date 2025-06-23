@@ -14,7 +14,7 @@ import org.springboot.trendmartecommerceplatform.user.User;
 import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table(name = "reviews")
 @Getter
 @Setter
 @NoArgsConstructor
