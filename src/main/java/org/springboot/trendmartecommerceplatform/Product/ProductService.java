@@ -33,7 +33,6 @@ public class ProductService {
     }
     public Product getById(Long id) {                 //manage
         return productRepository.findById(id).orElseThrow();
-//        -> new ResourceNotFoundException("Product not found with id: " + id));
     }
 
     public Product deleteProduct(long id) {
