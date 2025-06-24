@@ -6,9 +6,12 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springboot.trendmartecommerceplatform.category.Category;
+import org.springboot.trendmartecommerceplatform.discountAds.Discount;
+import org.springboot.trendmartecommerceplatform.review.Review;
 import org.springboot.trendmartecommerceplatform.stock.Stock;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,5 +45,15 @@ public class Product {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "stock_id")
     private Stock stock;
+
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Review> reviews = new ArrayList<>();
+
+    @OneToOne
+    @JsonBackReference
+    @JoinColumn(name = "discount_id")
+    private Discount discount;
+
 
 }

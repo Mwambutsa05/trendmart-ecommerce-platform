@@ -1,9 +1,6 @@
 package org.springboot.trendmartecommerceplatform.review;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
@@ -16,7 +13,11 @@ import lombok.ToString;
 @Data
 @ToString
 public class ReviewDto  {
+    @NotNull(message = "User ID is required")
+    @Pattern(regexp = "\\d+", message = "ID must contain digits only")
     private Long userId;
+    @NotNull(message = "product ID is required")
+    @Pattern(regexp = "\\d+", message = "ID must contain digits only")
     private Long productId;
     @Positive(message = "Rating must be a positive")
     @Max(value = 5, message = "Rating must be less that or equal to 5")

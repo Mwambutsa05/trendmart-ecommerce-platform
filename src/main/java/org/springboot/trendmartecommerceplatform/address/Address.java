@@ -24,7 +24,7 @@ public class Address  {
     private String PostalCode;
     private Boolean isDefault;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id")
     @JsonBackReference("users-address")
     private User user;
