@@ -1,8 +1,11 @@
 package org.springboot.trendmartecommerceplatform.discountAds;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springboot.trendmartecommerceplatform.Product.Product;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,12 +23,18 @@ public class Discount {
     private Long id;
     private String title;
     private String description;
-    private  Integer discountPercentage;
+
+    private  Double discountPercentage = 0.0;
     private  Boolean active;
 
     @Column(nullable = false)
     private LocalDate startDate;
     @Column(nullable = false)
     private LocalDate endDate;
+
+    @OneToOne(mappedBy = "discount",cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Product product;
+
 
 }

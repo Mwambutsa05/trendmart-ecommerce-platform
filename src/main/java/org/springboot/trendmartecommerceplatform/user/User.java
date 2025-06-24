@@ -1,9 +1,14 @@
 package org.springboot.trendmartecommerceplatform.user;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springboot.trendmartecommerceplatform.address.Address;
+import org.springboot.trendmartecommerceplatform.review.Review;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @Data
@@ -27,4 +32,13 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Review> review = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Address address;
+
 }

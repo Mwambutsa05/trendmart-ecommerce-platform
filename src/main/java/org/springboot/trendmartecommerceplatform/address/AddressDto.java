@@ -18,20 +18,18 @@ import java.io.Serializable;
 @Data
 @Getter
 @ToString
-
 public class AddressDto {
     @NotBlank
-    private final String street;
-    private final String city;
+    private String street;
+    private String city;
     @NotBlank
-    private final String state;
+    private String state;
     @NotNull
-    private final String Country;
-    @Size
+    private String Country;
     @NotNull
-    private final String PostalCode;
+    private String PostalCode;
     @NotNull
-    private final Boolean isDefault;
+    private Boolean isDefault;
     private Long userId;
 
 }
