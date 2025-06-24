@@ -16,6 +16,7 @@ import lombok.ToString;
 @Data
 @ToString
 public class ReviewDto  {
+    
     private Long userId;
     private Long productId;
     @Positive(message = "Rating must be a positive")
