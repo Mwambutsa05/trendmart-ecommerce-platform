@@ -1,7 +1,8 @@
 package org.springboot.trendmartecommerceplatform.cart;
+
 import lombok.RequiredArgsConstructor;
-import org.springboot.trendmartecommerceplatform.product.Product;
-import org.springboot.trendmartecommerceplatform.product.ProductRepository;
+import org.springboot.trendmartecommerceplatform.Product.Product;
+import org.springboot.trendmartecommerceplatform.Product.ProductRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class CartService {
     private final Long userId = 1L;
 
     private Cart getOrCreateCart() {
-        return cartRepository.findByUserId(userId).orElseGet(() -> {
+        return cartRepository.findByUser_Id(userId).orElseGet(() -> {
             Cart cart = new Cart();
             cart.setUserId(userId);
             cart.setCreatedAt(LocalDateTime.now());
@@ -29,23 +30,22 @@ public class CartService {
         });
     }
 
-
     public ResponseEntity<String> addToCart(CartItemRequest request) {
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
         Cart cart = getOrCreateCart();
 
-
-        Optional<CartItem> existing = cartItemRepository.findByCartIdAndProductId((cart.getId().product.getId());
+        // Use nested property names with underscores in repository method
+        Optional<CartItem> existing = cartItemRepository.findByCart_IdAndProduct_Id(cart.getId(), product.getId());
         if (existing.isPresent()) {
             CartItem item = existing.get();
             item.setQuantity(item.getQuantity() + request.getQuantity());
             cartItemRepository.save(item);
         } else {
             CartItem item = new CartItem();
-            item.setCartId(cart.getId());
-            item.setProduct(product.getId());
+            item.setCart(cart);
+            item.setProduct(product);
             item.setQuantity(request.getQuantity());
             cartItemRepository.save(item);
         }
@@ -53,14 +53,14 @@ public class CartService {
         return ResponseEntity.ok("Product added to cart successfully!");
     }
 
-
     public ResponseEntity<List<CartItemResponse>> getCartItems() {
         Cart cart = getOrCreateCart();
 
-        List<CartItem> items = cartItemRepository.findByCartId(cart.getId());
+
+        List<CartItem> items = cartItemRepository.findByCart_Id(cart.getId());
 
         List<CartItemResponse> responses = items.stream().map(item -> {
-            Product product = productRepository.findById(item.getProductId())
+            Product product = productRepository.findById(item.getProduct().getId())
                     .orElseThrow(() -> new RuntimeException("Product not found"));
 
             CartItemResponse response = new CartItemResponse();
@@ -85,7 +85,6 @@ public class CartService {
         return ResponseEntity.ok("Quantity updated successfully.");
     }
 
-
     public ResponseEntity<String> removeItem(Long itemId) {
         if (!cartItemRepository.existsById(itemId)) {
             return ResponseEntity.badRequest().body("Item not found.");
@@ -95,10 +94,9 @@ public class CartService {
         return ResponseEntity.ok("Item removed from cart.");
     }
 
-
     public ResponseEntity<String> clearCart() {
         Cart cart = getOrCreateCart();
-        cartItemRepository.deleteAllByCartId(cart.getId());
+        cartItemRepository.deleteAllByCart_Id(cart.getId());  // also nested property here
         return ResponseEntity.ok("Cart cleared successfully.");
     }
 }

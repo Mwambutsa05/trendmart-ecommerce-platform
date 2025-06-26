@@ -15,14 +15,14 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long orderId;    // Instead of @ManyToOne
     private Long productId;  // Instead of @ManyToOne
 
     private Integer quantity;
 
     private BigDecimal price;
 
-    public void setOrder(Order order) {
-    }
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 }
 

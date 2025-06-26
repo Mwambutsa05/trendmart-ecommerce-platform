@@ -3,8 +3,8 @@ package org.springboot.trendmartecommerceplatform.order;
 import lombok.RequiredArgsConstructor;
 import org.springboot.trendmartecommerceplatform.order.OrderRequest;
 import org.springboot.trendmartecommerceplatform.order.OrderItemRequest;
-import org.springboot.trendmartecommerceplatform.product.Product;
-import org.springboot.trendmartecommerceplatform.product.ProductRepository;
+import org.springboot.trendmartecommerceplatform.Product.Product;
+import org.springboot.trendmartecommerceplatform.Product.ProductRepository;
 import org.springboot.trendmartecommerceplatform.user.User;
 import org.springboot.trendmartecommerceplatform.user.UserRepository;
 import org.springboot.trendmartecommerceplatform.address.Address;
@@ -46,7 +46,7 @@ public class OrderService {
             totalAmount = totalAmount.add(itemTotal);
 
             OrderItem item = OrderItem.builder()
-                    .product(product)
+                    .productId(product.getId())
                     .quantity(itemReq.getQuantity())
                     .price(product.getPrice())
                     .build();

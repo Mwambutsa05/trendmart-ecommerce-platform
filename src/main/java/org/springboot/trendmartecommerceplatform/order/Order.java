@@ -2,6 +2,7 @@ package org.springboot.trendmartecommerceplatform.order;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springboot.trendmartecommerceplatform.Product.Product;
 import org.springboot.trendmartecommerceplatform.user.User;
 import org.springboot.trendmartecommerceplatform.address.Address;
 import org.springboot.trendmartecommerceplatform.order.OrderItem;
@@ -39,6 +40,8 @@ public class Order {
     @JoinColumn(name = "address_id")
     private Address address;
 
+    @ManyToOne
+    private Product product;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items;
