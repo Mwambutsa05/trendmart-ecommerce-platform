@@ -45,8 +45,7 @@ public class Product {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "stock_id")
     private Stock stock;
-<<<<<<< mwambutsa
-=======
+
 
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -58,6 +57,5 @@ public class Product {
     private Discount discount;
 
 
->>>>>>> main
 }
 
