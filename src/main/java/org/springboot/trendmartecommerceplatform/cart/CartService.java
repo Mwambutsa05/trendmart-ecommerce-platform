@@ -1,14 +1,13 @@
 package org.springboot.trendmartecommerceplatform.cart;
-import org.springboot.trendmartecommerceplatform.category.*;
-import org.springboot.trendmartecommerceplatform.cart.*;
-import org.springboot.trendmartecommerceplatform.product.*;
 import lombok.RequiredArgsConstructor;
+import org.springboot.trendmartecommerceplatform.product.Product;
+import org.springboot.trendmartecommerceplatform.product.ProductRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,9 +18,7 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
 
-
     private final Long userId = 1L;
-
 
     private Cart getOrCreateCart() {
         return cartRepository.findByUserId(userId).orElseGet(() -> {
@@ -39,12 +36,19 @@ public class CartService {
 
         Cart cart = getOrCreateCart();
 
-        CartItem item = new CartItem();
-        item.setCartId(cart.getId());
-        item.setProductId(product.getId());
-        item.setQuantity(request.getQuantity());
 
-        cartItemRepository.save(item);
+        Optional<CartItem> existing = cartItemRepository.findByCartIdAndProductId((cart.getId().product.getId());
+        if (existing.isPresent()) {
+            CartItem item = existing.get();
+            item.setQuantity(item.getQuantity() + request.getQuantity());
+            cartItemRepository.save(item);
+        } else {
+            CartItem item = new CartItem();
+            item.setCartId(cart.getId());
+            item.setProduct(product.getId());
+            item.setQuantity(request.getQuantity());
+            cartItemRepository.save(item);
+        }
 
         return ResponseEntity.ok("Product added to cart successfully!");
     }
@@ -65,10 +69,36 @@ public class CartService {
             response.setProductName(product.getName());
             response.setQuantity(item.getQuantity());
             response.setPrice(product.getPrice());
-
             return response;
         }).collect(Collectors.toList());
 
         return ResponseEntity.ok(responses);
+    }
+
+    public ResponseEntity<String> updateQuantity(Long itemId, Integer quantity) {
+        CartItem item = cartItemRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("Cart item not found"));
+
+        item.setQuantity(quantity);
+        cartItemRepository.save(item);
+
+        return ResponseEntity.ok("Quantity updated successfully.");
+    }
+
+
+    public ResponseEntity<String> removeItem(Long itemId) {
+        if (!cartItemRepository.existsById(itemId)) {
+            return ResponseEntity.badRequest().body("Item not found.");
+        }
+
+        cartItemRepository.deleteById(itemId);
+        return ResponseEntity.ok("Item removed from cart.");
+    }
+
+
+    public ResponseEntity<String> clearCart() {
+        Cart cart = getOrCreateCart();
+        cartItemRepository.deleteAllByCartId(cart.getId());
+        return ResponseEntity.ok("Cart cleared successfully.");
     }
 }

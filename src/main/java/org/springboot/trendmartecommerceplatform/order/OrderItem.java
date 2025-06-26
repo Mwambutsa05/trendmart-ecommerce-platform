@@ -21,5 +21,8 @@ public class OrderItem {
     private Integer quantity;
 
     private BigDecimal price;
+
+    public void setOrder(Order order) {
+    }
 }
 
