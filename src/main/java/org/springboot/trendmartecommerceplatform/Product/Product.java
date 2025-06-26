@@ -11,6 +11,7 @@ import org.springboot.trendmartecommerceplatform.review.Review;
 import org.springboot.trendmartecommerceplatform.stock.Stock;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,5 +58,18 @@ public class Product {
     private Discount discount;
 
 
+    public BigDecimal getDiscountPrice() {
+        if(discount != null &&
+        discount.getDiscountPercentage() > 0 &&
+        discount.getStartDate()!= null &&
+        discount.getEndDate()!= null) {
+            LocalDate today = LocalDate.now();
+            if (!today.isBefore(discount.getStartDate()) && !today.isAfter(discount.getEndDate())) {
+                BigDecimal discountAmount = price.multiply(BigDecimal.valueOf(discount.getDiscountPercentage() / 100));
+                return price.subtract(discountAmount);
+             }
+        }
+        return price;
+    }
 }
 
