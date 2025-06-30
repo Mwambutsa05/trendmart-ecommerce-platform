@@ -29,12 +29,12 @@ public class Product {
     private String name;
     private String description;
     private BigDecimal price;
-    private String imageUrl;
+    private BigDecimal originalPrice;
     private String skuCode;
     private String brand;
-
+    private String quantity;
     @ElementCollection
-    private List<String> urls;
+    private List<String> imageUrls;
     @CreationTimestamp
     private Date created_at;
 
