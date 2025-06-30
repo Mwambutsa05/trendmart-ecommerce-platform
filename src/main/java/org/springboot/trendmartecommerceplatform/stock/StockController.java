@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springboot.trendmartecommerceplatform.Product.Product;
 import org.springboot.trendmartecommerceplatform.Product.ProductService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,39 +19,44 @@ public class StockController {
     private final StockService stockService;
     private final ProductService productService;
 
-    @PostMapping("/product")
+    @PostMapping("{productId}")
     @Operation(summary = "inserting new product in stock")
     @PreAuthorize("hasRole('ADMIN')")
-    public Stock createStock(@RequestBody Dto dto, @PathVariable Long ProductId) {
-         return stockService.addStock(dto, ProductId);
+    public ResponseEntity<Stock> createStock(@RequestBody Dto dto, @PathVariable Long productId) {
+         Stock newStock = stockService.addStock(dto, productId);
+         return ResponseEntity.ok(newStock);
     }
 
-    @GetMapping("/all/products")
+    @GetMapping("/products")
     @Operation(summary = "all products in stock")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<Stock> getAllStocks() {
-        return stockService.findAllStocks();
+    public ResponseEntity<List<Stock>> getAllStocks() {
+        List<Stock> Stocks = stockService.findAllStocks();
+        return ResponseEntity.ok(Stocks);
     }
 
-    @GetMapping("/product/{productId}")
+    @GetMapping("/{productId}")
     @Operation(summary = "get products in stock by its id ")
     @PreAuthorize("hasRole('ADMIN')")
-    public Product getProductInStock(@PathVariable Long productId) {
-        return stockService.getProductFromStockById(productId);
+    public ResponseEntity<Product> getProductInStock(@PathVariable Long productId) {
+        Product productsInStock = stockService.getProductFromStockById(productId);
+        return ResponseEntity.ok(productsInStock);
     }
 
-   @PatchMapping("/edit/{id}")
+   @PatchMapping("/{productId}")
    @Operation(summary = "admin edit product in stock")
    @PreAuthorize("hasRole('ADMIN')")
-    public Stock editStock(@RequestBody Dto dto, @PathVariable Long productId) {
-        return stockService.updateStock(dto, productId);
+    public ResponseEntity<Stock> editStock(@RequestBody Dto dto, @PathVariable Long productId) {
+        Stock updateStock = stockService.updateStock(dto, productId);
+        return ResponseEntity.ok(updateStock);
    }
 
-   @DeleteMapping("/delete/{id}")
+   @DeleteMapping("/{productId}")
    @Operation(summary = "deletes product in stock")
    @PreAuthorize("hasRole('ADMIN')")
-   public Stock deleteStock(@PathVariable Long productId) {
-        return stockService.deleteStock(productId);
+   public ResponseEntity<String> deleteStock(@PathVariable Long productId) {
+        stockService.deleteStock(productId);
+        return ResponseEntity.ok("Deleted product with id " + productId);
    }
 
 }
