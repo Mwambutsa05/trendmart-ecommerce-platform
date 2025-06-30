@@ -1,15 +1,15 @@
 spring:
   profiles:
-    active: prod
-#    //default
+    active: default
+#    //default, prod
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/trendMart
-    password: 2020
+    url: jdbc:postgresql://localhost:5432/trendmart-ecommerce-platform
+    password: Ineza2005
     username: postgres
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
