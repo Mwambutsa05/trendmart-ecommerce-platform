@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,77 +20,46 @@ public class ProductController {
 
     @GetMapping("/products")
     @Operation(summary = "get all products")
-    public List<Product> getProducts() {
-        return productService.findAll();
+    public ResponseEntity<List<Product>> getProducts() {
+        List<Product> products = productService.findAll();
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("/products/{id}")
     @Operation(summary = "Get products by id")
-    public Product getProduct(@PathVariable Long id) {
-        return productService.getById(id);
+    public ResponseEntity<Product> getProduct(@PathVariable Long id) {
+        Product productById = productService.getById(id);
+        return ResponseEntity.ok(productById);
     }
 
 
     @PostMapping
     @Operation(summary = "Inserting a new product")
     @PreAuthorize("hasRole('ADMIN')")
-    public Product addProduct(@RequestBody Dto dto) {
-        return productService.addProduct(dto);
+    public ResponseEntity<Product> addProduct(@RequestBody Dto dto) {
+        Product newProduct = productService.addProduct(dto);
+        return ResponseEntity.ok(newProduct);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/admin/edit/{id}")
     @Operation(summary = "Admin Updates/edits products")
-    public Product EditProduct(@Valid @RequestBody Dto dto, @PathVariable long id) {
-        return productService.updateProduct(id, dto);
+    public ResponseEntity<Product> EditProduct(@Valid @RequestBody Dto dto, @PathVariable long id) {
+        Product updateProduct = productService.updateProduct(id, dto);
+        return ResponseEntity.ok(updateProduct);
     }
 
 
     @DeleteMapping
     @Operation(summary = "Delete product by id")
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteProduct(@PathVariable long id) {
+    public ResponseEntity<String> deleteProduct(@PathVariable long id) {
         productService.deleteProduct(id);
+        return ResponseEntity.ok("Deleted product with id " + id);
     }
 
 
 
 }
-//
-//package org.springboot.trendmartecommerceplatform.Product;
-//
-//import io.swagger.v3.oas.annotations.Operation;
-//import jakarta.validation.Valid;
-//import lombok.AllArgsConstructor;
-//import org.springframework.security.access.prepost.PreAuthorize;
-//import org.springframework.web.bind.annotation.*;
-//
-//@RestController
-//@RequestMapping("/api/admin/products")
-//@AllArgsConstructor
-//public class AdminProductController {
-//    private final ProductService productService;
-//
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @PostMapping
-//    @Operation(summary = "Admin adds products")
-//    public Product addProduct(@Valid @RequestBody Dto dto) {
-//        return productService.addProduct(dto);
-//    }
-//
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @PatchMapping("/edit/{id}")
-//    @Operation(summary = "Admin Updates/edits products")
-//    public Product EditProduct(@Valid @RequestBody Dto dto, @PathVariable long id) {
-//        return productService.updateProduct(id, dto);
-//    }
-//
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @PatchMapping("/delete/{id}")
-//    @Operation(summary = "Admin delets products")
-//    public void DeleteProduct(@Valid  @PathVariable long id) {
-//        productService.deleteProduct(id);
-//    }
-//
-//}
+
 

@@ -2,6 +2,8 @@ package org.springboot.trendmartecommerceplatform.order;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springboot.trendmartecommerceplatform.Product.Product;
+
 import java.math.BigDecimal;
 
 @Entity
@@ -15,7 +17,9 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long productId;  // Instead of @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
     private Integer quantity;
 
@@ -25,4 +29,3 @@ public class OrderItem {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 }
-

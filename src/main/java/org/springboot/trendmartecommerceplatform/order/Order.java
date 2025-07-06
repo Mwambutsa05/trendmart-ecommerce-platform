@@ -2,10 +2,8 @@ package org.springboot.trendmartecommerceplatform.order;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springboot.trendmartecommerceplatform.Product.Product;
 import org.springboot.trendmartecommerceplatform.user.User;
 import org.springboot.trendmartecommerceplatform.address.Address;
-import org.springboot.trendmartecommerceplatform.order.OrderItem;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -23,7 +21,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -39,9 +36,6 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
-
-    @ManyToOne
-    private Product product;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items;

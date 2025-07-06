@@ -1,12 +1,8 @@
 package org.springboot.trendmartecommerceplatform.cart;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springboot.trendmartecommerceplatform.Product.Product;
-import org.springboot.trendmartecommerceplatform.cart.Cart;
 
 @Entity
 @Table(name = "cartitems")
@@ -20,11 +16,11 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
