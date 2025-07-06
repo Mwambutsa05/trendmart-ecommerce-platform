@@ -25,7 +25,6 @@ public class ProductService {
         return productRepository.findAll();
     }
     public Product addProduct(Dto dto) {
-//        create default discount
         Discount discount = Discount.builder()
                 .discountPercentage(0.0)
                 .build();
