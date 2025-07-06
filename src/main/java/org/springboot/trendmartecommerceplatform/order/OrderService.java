@@ -27,7 +27,6 @@ public class OrderService {
     private final UserRepository userRepo;
     private final AddressRepository addressRepo;
 
-
     public ResponseEntity<String> placeOrder(OrderRequest request) {
         User user = userRepo.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -46,7 +45,7 @@ public class OrderService {
             totalAmount = totalAmount.add(itemTotal);
 
             OrderItem item = OrderItem.builder()
-                    .productId(product.getId())
+                    .product(product)
                     .quantity(itemReq.getQuantity())
                     .price(product.getPrice())
                     .build();
@@ -73,6 +72,7 @@ public class OrderService {
 
         return ResponseEntity.ok("Order placed successfully!");
     }
+
     public ResponseEntity<List<Order>> getOrdersByUser(Long userId) {
         List<Order> orders = orderRepo.findByUserId(userId);
         return ResponseEntity.ok(orders);

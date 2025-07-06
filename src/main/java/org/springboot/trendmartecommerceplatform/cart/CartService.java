@@ -3,6 +3,8 @@ package org.springboot.trendmartecommerceplatform.cart;
 import lombok.RequiredArgsConstructor;
 import org.springboot.trendmartecommerceplatform.Product.Product;
 import org.springboot.trendmartecommerceplatform.Product.ProductRepository;
+import org.springboot.trendmartecommerceplatform.user.User;
+import org.springboot.trendmartecommerceplatform.user.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +20,17 @@ public class CartService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
     private final Long userId = 1L;
 
     private Cart getOrCreateCart() {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         return cartRepository.findByUser_Id(userId).orElseGet(() -> {
             Cart cart = new Cart();
-            cart.setUserId(userId);
+            cart.setUser(user);  // Corrected: set full User object here
             cart.setCreatedAt(LocalDateTime.now());
             return cartRepository.save(cart);
         });
@@ -36,7 +42,6 @@ public class CartService {
 
         Cart cart = getOrCreateCart();
 
-        // Use nested property names with underscores in repository method
         Optional<CartItem> existing = cartItemRepository.findByCart_IdAndProduct_Id(cart.getId(), product.getId());
         if (existing.isPresent()) {
             CartItem item = existing.get();
@@ -55,7 +60,6 @@ public class CartService {
 
     public ResponseEntity<List<CartItemResponse>> getCartItems() {
         Cart cart = getOrCreateCart();
-
 
         List<CartItem> items = cartItemRepository.findByCart_Id(cart.getId());
 
@@ -96,7 +100,7 @@ public class CartService {
 
     public ResponseEntity<String> clearCart() {
         Cart cart = getOrCreateCart();
-        cartItemRepository.deleteAllByCart_Id(cart.getId());  // also nested property here
+        cartItemRepository.deleteAllByCart_Id(cart.getId());
         return ResponseEntity.ok("Cart cleared successfully.");
     }
 }
