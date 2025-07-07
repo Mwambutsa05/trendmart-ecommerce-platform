@@ -36,17 +36,15 @@ public class ProductService {
         productToAdd.setName(dto.getName());
         productToAdd.setDescription(dto.getDescription());
         productToAdd.setPrice(dto.getPrice());
- mwambutsa
+
         productToAdd.setOriginalPrice(dto.getOriginalPrice());
         productToAdd.setImageUrls(dto.getImageUrls());
         productToAdd.setQuantity(dto.getQuantity());
         productToAdd.setSkuCode(dto.getSkuCode());
         productToAdd.setBrand(dto.getBrand());
+        productToAdd.setDiscount(discount);
 
-        productToAdd.setImageUrl(dto.getImageUrl());
-        productToAdd.setDiscount(discount);// to put discount
-//        save product
- main
+
         return productRepository.save(productToAdd);
     }
     public Product updateProduct(long id, Dto dto) {          //Edit
