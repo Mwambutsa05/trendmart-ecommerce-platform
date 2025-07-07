@@ -25,7 +25,6 @@ public class ProductService {
         return productRepository.findAll();
     }
     public Product addProduct(Dto dto) {
-//        create default discount
         Discount discount = Discount.builder()
                 .discountPercentage(0.0)
                 .build();
@@ -36,17 +35,16 @@ public class ProductService {
         productToAdd.setName(dto.getName());
         productToAdd.setDescription(dto.getDescription());
         productToAdd.setPrice(dto.getPrice());
- mwambutsa
         productToAdd.setOriginalPrice(dto.getOriginalPrice());
         productToAdd.setImageUrls(dto.getImageUrls());
         productToAdd.setQuantity(dto.getQuantity());
         productToAdd.setSkuCode(dto.getSkuCode());
         productToAdd.setBrand(dto.getBrand());
 
-        productToAdd.setImageUrl(dto.getImageUrl());
+        productToAdd.setImageUrls(dto.getImageUrls());
         productToAdd.setDiscount(discount);// to put discount
-//        save product
- main
+//       save product;
+
         return productRepository.save(productToAdd);
     }
     public Product updateProduct(long id, Dto dto) {          //Edit
