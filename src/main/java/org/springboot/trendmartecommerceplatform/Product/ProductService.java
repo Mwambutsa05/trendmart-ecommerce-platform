@@ -1,17 +1,11 @@
 package org.springboot.trendmartecommerceplatform.Product;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springboot.trendmartecommerceplatform.discountAds.Discount;
-import org.springboot.trendmartecommerceplatform.discountAds.DiscountDto;
 import org.springboot.trendmartecommerceplatform.discountAds.DiscountRepository;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @AllArgsConstructor
@@ -36,17 +30,9 @@ public class ProductService {
         productToAdd.setName(dto.getName());
         productToAdd.setDescription(dto.getDescription());
         productToAdd.setPrice(dto.getPrice());
- mwambutsa
-        productToAdd.setOriginalPrice(dto.getOriginalPrice());
-        productToAdd.setImageUrls(dto.getImageUrls());
-        productToAdd.setQuantity(dto.getQuantity());
-        productToAdd.setSkuCode(dto.getSkuCode());
-        productToAdd.setBrand(dto.getBrand());
-
         productToAdd.setImageUrl(dto.getImageUrl());
         productToAdd.setDiscount(discount);// to put discount
 //        save product
- main
         return productRepository.save(productToAdd);
     }
     public Product updateProduct(long id, Dto dto) {          //Edit
@@ -54,11 +40,7 @@ public class ProductService {
        product.setName(dto.getName());
        product.setDescription(dto.getDescription());
        product.setPrice(dto.getPrice());
-       product.setOriginalPrice(dto.getOriginalPrice());
-       product.setImageUrls(dto.getImageUrls());
-       product.setQuantity(dto.getQuantity());
-       product.setSkuCode(dto.getSkuCode());
-       product.setBrand(dto.getBrand());
+       product.setImageUrl(dto.getImageUrl());
        return productRepository.save(product);
     }
     public Product getById(Long id) {                 //manage

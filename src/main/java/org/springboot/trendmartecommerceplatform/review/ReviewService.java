@@ -21,6 +21,7 @@ public class ReviewService {
 
         User user = userRepository.findById(Dto.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
         Product product = productRepository.findById(Dto.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
+
         Review review = new Review();
         review.setUser(user);
         review.setProduct(product);
@@ -39,6 +40,7 @@ public class ReviewService {
     }
     public Review findReviewByProductId(Long productId) {
         return reviewRepository.findByProductId(productId).orElseThrow(() -> new RuntimeException("Review not found"));
+
 
     }
     public void deleteReview(Long id) {
