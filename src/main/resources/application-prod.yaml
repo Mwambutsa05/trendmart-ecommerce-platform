@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${DB_URL}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/TrendMart_EcommercePlatform
     username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: validate
