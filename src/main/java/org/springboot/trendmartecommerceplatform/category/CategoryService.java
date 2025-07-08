@@ -2,6 +2,7 @@ package org.springboot.trendmartecommerceplatform.category;
 
 import lombok.AllArgsConstructor;
 import org.springboot.trendmartecommerceplatform.Product.ProductRepository;
+import org.springboot.trendmartecommerceplatform.exceptionHandling.ResourceNotFound;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class CategoryService {
    }
 
    public Category updateCategory(Dto dto, long id) {
-       Category categoryUpdate = categoryRepository.findById(id).get();
+       Category categoryUpdate = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFound("category not found"));
        categoryUpdate.setName(dto.getName());
        categoryUpdate.setDescription(dto.getDescription());
        return categoryRepository.save(categoryUpdate);
