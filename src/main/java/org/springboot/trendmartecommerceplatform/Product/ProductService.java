@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springboot.trendmartecommerceplatform.discountAds.Discount;
 import org.springboot.trendmartecommerceplatform.discountAds.DiscountDto;
 import org.springboot.trendmartecommerceplatform.discountAds.DiscountRepository;
+import org.springboot.trendmartecommerceplatform.exceptionHandling.ResourceNotFound;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -35,20 +36,25 @@ public class ProductService {
         productToAdd.setName(dto.getName());
         productToAdd.setDescription(dto.getDescription());
         productToAdd.setPrice(dto.getPrice());
+
+
+
         productToAdd.setOriginalPrice(dto.getOriginalPrice());
         productToAdd.setImageUrls(dto.getImageUrls());
         productToAdd.setQuantity(dto.getQuantity());
         productToAdd.setSkuCode(dto.getSkuCode());
         productToAdd.setBrand(dto.getBrand());
+        productToAdd.setDiscount(discount);
+
+
 
         productToAdd.setImageUrls(dto.getImageUrls());
-        productToAdd.setDiscount(discount);// to put discount
-//       save product;
+        productToAdd.setDiscount(discount);
 
         return productRepository.save(productToAdd);
     }
     public Product updateProduct(long id, Dto dto) {          //Edit
-       Product product = productRepository.findById(id).orElseThrow();
+       Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFound("Product not found"));
        product.setName(dto.getName());
        product.setDescription(dto.getDescription());
        product.setPrice(dto.getPrice());
@@ -60,11 +66,11 @@ public class ProductService {
        return productRepository.save(product);
     }
     public Product getById(Long id) {                 //manage
-        return productRepository.findById(id).orElseThrow();
+        return productRepository.findById(id).orElseThrow(() -> new ResourceNotFound("Product not found"));
     }
 
     public Product deleteProduct(long id) {
-        Product product = productRepository.findById(id).orElseThrow();
+        Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFound("Product not found"));
         productRepository.delete(product);
         return product;
     }
