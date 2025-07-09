@@ -5,6 +5,7 @@ import org.springboot.trendmartecommerceplatform.order.OrderRequest;
 import org.springboot.trendmartecommerceplatform.order.OrderItemRequest;
 import org.springboot.trendmartecommerceplatform.Product.Product;
 import org.springboot.trendmartecommerceplatform.Product.ProductRepository;
+import org.springboot.trendmartecommerceplatform.trackingOrder.OrderStatus;
 import org.springboot.trendmartecommerceplatform.user.User;
 import org.springboot.trendmartecommerceplatform.user.UserRepository;
 import org.springboot.trendmartecommerceplatform.address.Address;
@@ -57,7 +58,7 @@ public class OrderService {
                 .user(user)
                 .address(address)
                 .paymentMethod(request.getPaymentMethod())
-                .status("PENDING")
+                .status(OrderStatus.PENDING)
                 .totalAmount(totalAmount)
                 .createdAt(LocalDateTime.now())
                 .build();
