@@ -7,7 +7,6 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springboot.trendmartecommerceplatform.user.User;
 import org.springboot.trendmartecommerceplatform.user.UserRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -61,6 +60,10 @@ public class JwtUtil {
 
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public String extractUsername(String token) {
+        return extractUserName(token);
     }
 
     public String extractRole(String token) {
