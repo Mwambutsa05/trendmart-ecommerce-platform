@@ -42,12 +42,12 @@ public class ProductService {
         productToAdd.setBrand(dto.getBrand());
 
         productToAdd.setImageUrls(dto.getImageUrls());
-        productToAdd.setDiscount(discount);// to put discount
+        productToAdd.setDiscount(discount);
 //       save product;
 
         return productRepository.save(productToAdd);
     }
-    public Product updateProduct(long id, Dto dto) {          //Edit
+    public Product updateProduct(long id, Dto dto) {
        Product product = productRepository.findById(id).orElseThrow();
        product.setName(dto.getName());
        product.setDescription(dto.getDescription());

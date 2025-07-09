@@ -19,18 +19,22 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 @EnableWebSecurity
 public class SecurityConfig {
+
     private final JwtFilter jwtFilter;
 
     @Bean
-
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.
-                csrf(crsf -> crsf.disable()).
-                sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
-                authorizeHttpRequests(auth -> auth
+        http
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasRole("USER")
-                        .requestMatchers( "/auth/register",
+                        .requestMatchers(
+                                "/api/user/forgot-password",
+                                "/api/user/reset-password",
+                                "/auth/register",
+                                "/auth/login",
                                 "/register",
                                 "/",
                                 "/v2/api-docs",
@@ -41,12 +45,16 @@ public class SecurityConfig {
                                 "/configuration/ui",
                                 "/configuration/security",
                                 "/swagger-ui/**",
-                                "/webjars/**",
-                                "/auth/login",
-                                "/swagger-ui.html").permitAll().anyRequest().authenticated()
-                ) .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                                "/swagger-ui.html",
+                                "/webjars/**"
+                        ).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -56,6 +64,4 @@ public class SecurityConfig {
     public AuthenticationManager authManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
 }
-

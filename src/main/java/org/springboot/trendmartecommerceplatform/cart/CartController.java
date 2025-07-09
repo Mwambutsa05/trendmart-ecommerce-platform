@@ -1,5 +1,7 @@
 package org.springboot.trendmartecommerceplatform.cart;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,24 +10,25 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/cart")
 @RequiredArgsConstructor
+@SecurityRequirement(name ="auth")
 public class CartController {
 
     private final CartService cartService;
 
 
-    @PostMapping("/api/cart/add")
+    @PostMapping("/add")
     public ResponseEntity<String> addToCart(@RequestBody CartItemRequest request) {
         return cartService.addToCart(request);
     }
 
 
-    @GetMapping("/api/cart/items")
+    @GetMapping("/items")
     public ResponseEntity<List<CartItemResponse>> getCartItems() {
         return cartService.getCartItems();
     }
 
 
-    @PutMapping("/api/cart/items/{itemId}")
+    @PutMapping("/{itemId}")
     public ResponseEntity<String> updateItemQuantity(
             @PathVariable Long itemId,
             @RequestParam Integer quantity
@@ -34,14 +37,15 @@ public class CartController {
     }
 
 
-    @DeleteMapping("/api/cart/items/{itemId}")
+    @DeleteMapping("/delete/{itemId}")
     public ResponseEntity<String> removeItem(@PathVariable Long itemId) {
         return cartService.removeItem(itemId);
     }
 
 
 
-    @DeleteMapping("/api/cart/clear")
+    @DeleteMapping("/clear")
+    @Operation(description = "/clear cart")
     public ResponseEntity<String> clearCart() {
         return cartService.clearCart();
     }
