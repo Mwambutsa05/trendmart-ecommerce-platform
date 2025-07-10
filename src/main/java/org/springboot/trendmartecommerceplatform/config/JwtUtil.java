@@ -35,7 +35,6 @@ public class JwtUtil {
         this.signingKey = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    // Generate token with full user info
     public String generateToken(String email) {
         Map<String, Object> claims = new HashMap<>();
 
@@ -53,19 +52,17 @@ public class JwtUtil {
     private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(subject) // subject is usually the email/username
+                .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(signingKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // Extract username (email) from token
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    // Extract role from token
     public String extractRole(String token) {
         return extractClaim(token, claims -> claims.get("role", String.class));
     }

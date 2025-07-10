@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/api")
+@RequestMapping("/api/products")
 @RestController
 @RequiredArgsConstructor
 @SecurityRequirement(name = "auth")
@@ -18,14 +18,14 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping("/products")
+    @GetMapping
     @Operation(summary = "get all products")
     public ResponseEntity<List<Product>> getProducts() {
         List<Product> products = productService.findAll();
         return ResponseEntity.ok(products);
     }
 
-    @GetMapping("/products/{id}")
+    @GetMapping("/{id}")
     @Operation(summary = "Get products by id")
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
         Product productById = productService.getById(id);
@@ -35,7 +35,6 @@ public class ProductController {
 
     @PostMapping
     @Operation(summary = "Inserting a new product")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Product> addProduct(@RequestBody Dto dto) {
         Product newProduct = productService.addProduct(dto);
         return ResponseEntity.ok(newProduct);
@@ -43,6 +42,7 @@ public class ProductController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/admin/edit/{id}")
+
     @Operation(summary = "Admin Updates/edits products")
     public ResponseEntity<Product> EditProduct(@Valid @RequestBody Dto dto, @PathVariable long id) {
         Product updateProduct = productService.updateProduct(id, dto);
