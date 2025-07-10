@@ -2,6 +2,7 @@ package org.springboot.trendmartecommerceplatform.user;
 
 import lombok.AllArgsConstructor;
 import org.springboot.trendmartecommerceplatform.config.JwtUtil;
+import org.springboot.trendmartecommerceplatform.exceptionHandling.ResourceNotFound;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +14,9 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    // Register normal user
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists");
+            throw new ResourceNotFound("Email already exists");
         }
 
         User user = new User();
@@ -37,7 +37,7 @@ public class UserService {
 
     public AuthResponse registerAdmin(RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists");
+            throw new ResourceNotFound("Email already exists");
         }
 
         User user = new User();
@@ -48,7 +48,7 @@ public class UserService {
         user.setPhoneNumber(request.getPhoneNumber());
         user.setDateOfBirth(request.getDateOfBirth());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Role.ADMIN); // 👈 Admin role
+        user.setRole(Role.ADMIN);
 
         User savedUser = userRepository.save(user);
         String token = jwtUtil.generateToken(savedUser.getEmail());
@@ -59,10 +59,10 @@ public class UserService {
 
     public AuthResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFound("User not found"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Wrong password");
+            throw new ResourceNotFound("Wrong password");
         }
 
         String token = jwtUtil.generateToken(user.getEmail());
@@ -71,9 +71,9 @@ public class UserService {
                 user.getFirstName(), user.getLastName(), user.getRole().name(), user.getId());
     }
 
-    // Additional business logic methods can be added here
+
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found: " + email));
+                .orElseThrow(() -> new ResourceNotFound("User not found: " + email));
     }
 }
