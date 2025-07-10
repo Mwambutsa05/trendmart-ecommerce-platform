@@ -32,6 +32,7 @@ public class User implements UserDetails {
     private String phoneNumber;
     private String password;
     private Date dateOfBirth;
+    private boolean verified;
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER; // Default role

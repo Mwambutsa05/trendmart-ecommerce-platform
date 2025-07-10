@@ -1,11 +1,11 @@
 spring:
   profiles:
-    active: default
-  #    //default, prod
+    active: prod
+#    //default, prod
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/TrendMart_EcommercePlatform
-    password: Alice@123
+    url: jdbc:postgresql://localhost:5432/trendMart
+    password: 2020
     username: postgres
   jpa:
     hibernate:
@@ -15,6 +15,21 @@ spring:
       hibernate:
         format_sql: true
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: your_email@gmail.com
+    password: your_app_password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 
   flyway:
     baseline-on-migrate: true
+    repair-on-migrate: true
+
+

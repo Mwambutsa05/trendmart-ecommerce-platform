@@ -3,6 +3,7 @@ package org.springboot.trendmartecommerceplatform.cart;
 import lombok.RequiredArgsConstructor;
 import org.springboot.trendmartecommerceplatform.Product.Product;
 import org.springboot.trendmartecommerceplatform.Product.ProductRepository;
+import org.springboot.trendmartecommerceplatform.exceptionHandling.ResourceNotFound;
 import org.springboot.trendmartecommerceplatform.user.User;
 import org.springboot.trendmartecommerceplatform.user.UserRepository;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class CartService {
 
     private Cart getOrCreateCart() {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFound("User not found"));
 
         return cartRepository.findByUser_Id(userId).orElseGet(() -> {
             Cart cart = new Cart();
@@ -38,7 +39,7 @@ public class CartService {
 
     public ResponseEntity<String> addToCart(CartItemRequest request) {
         Product product = productRepository.findById(request.getProductId())
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFound("Product not found"));
 
         Cart cart = getOrCreateCart();
 
@@ -65,7 +66,7 @@ public class CartService {
 
         List<CartItemResponse> responses = items.stream().map(item -> {
             Product product = productRepository.findById(item.getProduct().getId())
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
+                    .orElseThrow(() -> new ResourceNotFound("Product not found"));
 
             CartItemResponse response = new CartItemResponse();
             response.setItemId(item.getId());
@@ -81,7 +82,7 @@ public class CartService {
 
     public ResponseEntity<String> updateQuantity(Long itemId, Integer quantity) {
         CartItem item = cartItemRepository.findById(itemId)
-                .orElseThrow(() -> new RuntimeException("Cart item not found"));
+                .orElseThrow(() -> new ResourceNotFound("Cart item not found"));
 
         item.setQuantity(quantity);
         cartItemRepository.save(item);
