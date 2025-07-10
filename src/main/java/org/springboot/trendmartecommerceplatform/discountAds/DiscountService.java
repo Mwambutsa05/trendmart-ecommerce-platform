@@ -3,6 +3,7 @@ package org.springboot.trendmartecommerceplatform.discountAds;
 import lombok.RequiredArgsConstructor;
 import org.springboot.trendmartecommerceplatform.Product.Product;
 import org.springboot.trendmartecommerceplatform.Product.ProductRepository;
+import org.springboot.trendmartecommerceplatform.exceptionHandling.ResourceNotFound;
 import org.springboot.trendmartecommerceplatform.review.ReviewRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class DiscountService {
     private final ProductRepository productRepository;
 
     public Discount createDiscount(DiscountDto dto) {
-        Product product = productRepository.findById(dto.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
+        Product product = productRepository.findById(dto.getProductId()).orElseThrow(() -> new ResourceNotFound("Product not found"));
         Discount discount = new Discount();
         discount.setTitle(dto.getTitle());
         discount.setDescription(dto.getDescription());
@@ -32,11 +33,11 @@ public class DiscountService {
         return discountRepository.findAll();
     }
     public Discount getDiscountById(Long id) {
-        return discountRepository.findById(id).orElseThrow(() -> new RuntimeException("Discount not found"));
+        return discountRepository.findById(id).orElseThrow(() -> new ResourceNotFound("Discount not found"));
 
     }
     public Discount updateDiscount(Long id ,DiscountDto dto) {
-        Discount discount = discountRepository.findById(id).orElseThrow(() -> new RuntimeException("Discount not found"));
+        Discount discount = discountRepository.findById(id).orElseThrow(() -> new ResourceNotFound("Discount not found"));
         discount.setTitle(dto.getTitle());
         discount.setDescription(dto.getDescription());
         discount.setDiscountPercentage(dto.getDiscountPercentage());
