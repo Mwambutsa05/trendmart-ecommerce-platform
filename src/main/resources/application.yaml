@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: prod
+    active: default
 #    //default, prod
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -26,6 +26,11 @@ spring:
           auth: true
           starttls:
             enable: true
+
+
+    spring:
+      flyway:
+        repair-on-migrate: true
 
 
 
