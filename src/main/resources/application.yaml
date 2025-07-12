@@ -4,7 +4,7 @@ spring:
 #    //default, prod
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/trendmart-ecommerce-platform
+    url: jdbc:postgresql://localhost:5432/trendmart_ecommerce_platform
     password: Ineza2005
     username: postgres
   jpa:
