@@ -44,7 +44,6 @@ public class JwtUtil {
         claims.put("userId", user.getId());
         claims.put("firstName", user.getFirstName());
         claims.put("lastName", user.getLastName());
-
         return createToken(claims, email);
     }
 
@@ -93,7 +92,7 @@ public class JwtUtil {
 
     public Boolean isTokenValid(String token) {
         try {
-            extractAllClaims(token); // Will throw if invalid
+            extractAllClaims(token);
             return !isTokenExpired(token);
         } catch (Exception e) {
             return false;
