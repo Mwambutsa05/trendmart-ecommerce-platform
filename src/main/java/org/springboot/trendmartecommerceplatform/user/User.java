@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springboot.trendmartecommerceplatform.address.Address;
 import org.springboot.trendmartecommerceplatform.review.Review;
+import org.springboot.trendmartecommerceplatform.wishlist.WishlistItem;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -74,4 +75,8 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private Address address;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<WishlistItem> wishlistItems = new ArrayList<>();
+
 }

@@ -1,0 +1,1 @@
+DROP SEQUENCE reviews_seq CASCADE;
