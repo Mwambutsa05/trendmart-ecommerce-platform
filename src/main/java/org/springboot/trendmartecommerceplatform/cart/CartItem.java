@@ -1,4 +1,5 @@
 package org.springboot.trendmartecommerceplatform.cart;
+import  org.springboot.trendmartecommerceplatform.cart.CartItem;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,4 +26,11 @@ public class CartItem {
     private Product product;
 
     private Integer quantity;
+
+    public double getSubtotal() {
+        if (product == null || product.getPrice() == null || quantity == null) {
+            return 0;
+        }
+        return product.getPrice() * quantity;
+    }
 }

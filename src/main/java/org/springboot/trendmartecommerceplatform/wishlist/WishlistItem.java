@@ -7,6 +7,7 @@ import org.springboot.trendmartecommerceplatform.Product.Product;
 import org.springboot.trendmartecommerceplatform.user.User;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -29,6 +30,8 @@ public class WishlistItem {
     @JoinColumn(name = "product_id")
     @JsonBackReference
     private Product product;
+    @Column
+    private BigDecimal price;
 
     @CreationTimestamp
     private Date addedAt;
