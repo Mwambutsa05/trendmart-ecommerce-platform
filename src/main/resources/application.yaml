@@ -3,6 +3,8 @@ spring:
     active: prod
   datasource:
     driver-class-name: org.postgresql.Driver
+
+
     url: jdbc:postgresql://localhost:5432/trendmart_ecommerce_platform
     username: postgres
     password: Ineza2005
