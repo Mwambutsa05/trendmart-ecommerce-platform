@@ -34,7 +34,11 @@ public class SecurityConfig {
                                 "/auth/register/**",
                                 "/register",
                                 "/auth/login",
+
                                 "/auth/verify-otp",
+
+                                "/auth/verify/**",
+
                                 "/",
                                 "/v2/api-docs",
                                 "/v3/api-docs",

@@ -1,13 +1,49 @@
+#spring:
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    url: ${DB_URL}
+#    password: ${DB_PASSWORD}
+#    username: ${DB_USERNAME}
+#  jpa:
+#    hibernate:
+#      ddl-auto: validate
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+#
+#  flyway:
+#    locations: classpath:db/migration
+#    repair-on-migrate: true
+#    validate-on-migrate: true
+#    baseline-on-migrate: false
+
+
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${DB_URL}
-    password: ${DB_PASSWORD}
+    url: ${DB_URL:jdbc:postgresql://dpg-d1cka9adbo4c73cuoeq0-a.oregon-postgres.render.com:5432/trendmart_ecommerce}
     username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
   jpa:
     hibernate:
       ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
-        forma0t_sql: true
+        format_sql: true
+
+  flyway:
+    locations: classpath:db/migration
+    repair-on-migrate: true
+    validate-on-migrate: false
+    baseline-on-migrate: false
+
+flutterwave:
+  secret-key: ${FLUTTERWAVE_SECRET_KEY:VJd6YmFZzrPLEV5OGjdiJy2Rm6iecMSR}
+  base-url: ${FLUTTERWAVE_BASE_URL:https://api.flutterwave.com/v3/payments}
+
+#  flutterwave:
+#    secret-key: ${FLUTTERWAVE_SECRET_KEY}
+#    base-url: ${FLUTTERWAVE_BASE_URL}

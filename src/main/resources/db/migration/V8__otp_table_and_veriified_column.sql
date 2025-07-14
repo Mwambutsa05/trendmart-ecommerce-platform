@@ -15,3 +15,7 @@ ALTER TABLE users
 
 ALTER TABLE users
     ALTER COLUMN verified SET NOT NULL;
+
+
+DROP INDEX IF EXISTS idx_order_tracking_order_id;
+DROP INDEX IF EXISTS idx_order_tracking_status;
