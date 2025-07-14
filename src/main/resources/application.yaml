@@ -1,12 +1,12 @@
 spring:
   profiles:
     active: prod
-#    //default, prod
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/trendmart_ecommerce_platform
-    password: Ineza2005
     username: postgres
+    password: Ineza2005
+
   jpa:
     hibernate:
       ddl-auto: validate
@@ -27,11 +27,9 @@ spring:
           starttls:
             enable: true
 
+  flyway:
+    repair-on-migrate: true
 
-    spring:
-      flyway:
-        repair-on-migrate: true
-
-
-
-
+flutterwave:
+  secret-key: ${FLUTTERWAVE_SECRET_KEY:default-secret-key-if-not-set}
+  base-url: ${FLUTTERWAVE_BASE_URL:https://api.flutterwave.com/v3/payments}
