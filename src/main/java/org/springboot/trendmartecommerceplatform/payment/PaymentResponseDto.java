@@ -7,10 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentRequestDto {
-    private String email;
-    private String firstName;
-    private String lastName;
-    private int    amount;
-    private String currency;
+public class PaymentResponseDto {
+    private String status;
+    private String paymentLink;
+    private String txRef;
+    private String message;
 }
