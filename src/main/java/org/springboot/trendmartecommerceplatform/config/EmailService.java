@@ -21,8 +21,7 @@ public class EmailService {
     private final JavaMailSender javaMailSender;
 
     // generate and send code
-    public void sendVerificationCode(String email) {
-        String code = String.valueOf(new Random().nextInt(999999));
+    public void sendVerificationCode(String email,String code) {
         OtpVerification verification = new OtpVerification();
         verification.setCode(code);
         verification.setEmail(email);
@@ -37,17 +36,17 @@ public class EmailService {
         message.setText("Your verification code is " + code);
         javaMailSender.send(message);
     }
-    public boolean verifyOtp(String email, String code) {
-        Optional<OtpVerification> optional = verificationCodeRepository.findByEmailAndCodeAndUsedFalse(email, code);
-        if (optional.isPresent()) {
-            OtpVerification verification = optional.get();
-            if (verification.getExpiryDate().isAfter(LocalDateTime.now())) {
-                verification.setUsed(true);
-                verificationCodeRepository.save(verification);
-                return true;
-            }
-        }
-        return false;
-    }
+//    public boolean verifyOtp(String email, String code) {
+//        Optional<OtpVerification> optional = verificationCodeRepository.findByEmailAndCodeAndUsedFalse(email, code);
+//        if (optional.isPresent()) {
+//            OtpVerification verification = optional.get();
+//            if (verification.getExpiryDate().isAfter(LocalDateTime.now())) {
+//                verification.setUsed(true);
+//                verificationCodeRepository.save(verification);
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
 }
