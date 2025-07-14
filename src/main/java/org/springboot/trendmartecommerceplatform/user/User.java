@@ -17,6 +17,8 @@ import java.util.List;
 
 @Data
 @Entity
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
@@ -33,11 +35,18 @@ public class User implements UserDetails {
     private String phoneNumber;
     private String password;
     private Date dateOfBirth;
+    private boolean verified;
+
+    
+
+
+    private boolean enabled = false; // Control activation
+
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER; // Default role
 
-    private boolean enabled = true; // Control activation
+
 
     // === Spring Security ===
 

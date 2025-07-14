@@ -1,6 +1,7 @@
 package org.springboot.trendmartecommerceplatform.order;
 
 import lombok.RequiredArgsConstructor;
+import org.springboot.trendmartecommerceplatform.exceptionHandling.ResourceNotFound;
 import org.springboot.trendmartecommerceplatform.order.OrderRequest;
 import org.springboot.trendmartecommerceplatform.order.OrderItemRequest;
 import org.springboot.trendmartecommerceplatform.Product.Product;
@@ -30,17 +31,17 @@ public class OrderService {
 
     public ResponseEntity<String> placeOrder(OrderRequest request) {
         User user = userRepo.findById(request.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFound("User not found"));
 
         Address address = addressRepo.findById(request.getAddressId())
-                .orElseThrow(() -> new RuntimeException("Address not found"));
+                .orElseThrow(() -> new ResourceNotFound("Address not found"));
 
         BigDecimal totalAmount = BigDecimal.ZERO;
         List<OrderItem> orderItems = new ArrayList<>();
 
         for (OrderItemRequest itemReq : request.getItems()) {
             Product product = productRepo.findById(itemReq.getProductId())
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
+                    .orElseThrow(() -> new ResourceNotFound("Product not found"));
 
             BigDecimal itemTotal = product.getPrice().multiply(BigDecimal.valueOf(itemReq.getQuantity()));
             totalAmount = totalAmount.add(itemTotal);
