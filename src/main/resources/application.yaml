@@ -1,37 +1,22 @@
-spring:
-  profiles:
-    active: prod
-  datasource:
-    driver-class-name: org.postgresql.Driver
-
-
-    url: jdbc:postgresql://localhost:5432/trendmart_ecommerce_platform
-    username: postgres
-    password: Ineza2005
-
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${EMAIL_USERNAME}
-    password: ${EMAIL_PASSWORD}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-
-  flyway:
-    repair-on-migrate: true
-
-flutterwave:
-  secret-key: ${FLUTTERWAVE_SECRET_KEY:VJd6YmFZzrPLEV5OGjdiJy2Rm6iecMSR}
-  base-url: ${FLUTTERWAVE_BASE_URL:https://api.flutterwave.com/v3/payments}
+#spring:
+#  config:
+#    activate:
+#      on-profile: prod
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5432/TrendMart_EcommercePlatform
+#    password: Alice@123
+#    username: postgres
+#  jpa:
+#    hibernate:
+#      ddl-auto: validate
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+#  flyway:
+#    baseline-on-migrate: true
+#logging:
+#  level:
+#    com.zaxxer.hikari: DEBUG
+#    org.springframework.jdbc.datasource: DEBUG
