@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: prod
+    active: default
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/trendmart_ecommerce_platform
