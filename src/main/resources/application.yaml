@@ -4,8 +4,8 @@ spring:
 #    //default, prod
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/trendMart
-    password: 2020
+    url: jdbc:postgresql://localhost:5432/trendmart_ecommerce_platform
+    password: Ineza2005
     username: postgres
   jpa:
     hibernate:
@@ -27,6 +27,8 @@ spring:
           starttls:
             enable: true
 
-
+flutterwave:
+  secret-key:
+  base-url:
 
 
