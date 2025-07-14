@@ -40,6 +40,10 @@ spring:
     validate-on-migrate: false
     baseline-on-migrate: false
 
+flutterwave:
+  secret-key: ${FLUTTERWAVE_SECRET_KEY:VJd6YmFZzrPLEV5OGjdiJy2Rm6iecMSR}
+  base-url: ${FLUTTERWAVE_BASE_URL:https://api.flutterwave.com/v3/payments}
+
 #  flutterwave:
 #    secret-key: ${FLUTTERWAVE_SECRET_KEY}
 #    base-url: ${FLUTTERWAVE_BASE_URL}

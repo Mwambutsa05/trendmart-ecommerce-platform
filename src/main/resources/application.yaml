@@ -31,5 +31,5 @@ spring:
     repair-on-migrate: true
 
 flutterwave:
-  secret-key: ${FLUTTERWAVE_SECRET_KEY:default-secret-key-if-not-set}
+  secret-key: ${FLUTTERWAVE_SECRET_KEY:VJd6YmFZzrPLEV5OGjdiJy2Rm6iecMSR}
   base-url: ${FLUTTERWAVE_BASE_URL:https://api.flutterwave.com/v3/payments}
