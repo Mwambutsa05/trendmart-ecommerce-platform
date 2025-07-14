@@ -1,22 +1,32 @@
-#spring:
-#  config:
-#    activate:
-#      on-profile: prod
-#  datasource:
-#    driver-class-name: org.postgresql.Driver
-#    url: jdbc:postgresql://localhost:5432/TrendMart_EcommercePlatform
-#    password: Alice@123
-#    username: postgres
-#  jpa:
-#    hibernate:
-#      ddl-auto: validate
-#    show-sql: true
-#    properties:
-#      hibernate:
-#        format_sql: true
-#  flyway:
-#    baseline-on-migrate: true
-#logging:
-#  level:
-#    com.zaxxer.hikari: DEBUG
-#    org.springframework.jdbc.datasource: DEBUG
+spring:
+  profiles:
+    active: prod
+#    //default, prod
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/trendMart
+    password: 2020
+    username: postgres
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: uwamahorosonia1@gmail.com
+    password: lrsi qjwm hxkz gzfr
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+
+
