@@ -25,5 +25,6 @@ public class RegisterRequest {
     private String password;
     @Transient
     private String confirmPassword;
+    
     private Date dateOfBirth;
 }
