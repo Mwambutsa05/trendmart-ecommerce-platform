@@ -37,9 +37,9 @@ public class UserService {
         user.setPhoneNumber(request.getPhoneNumber());
         user.setDateOfBirth(request.getDateOfBirth());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setConfirmPassword(request.getConfirmPassword());
         user.setRole(Role.USER);
         user.setVerified(false);
-
         userRepository.save(user);
 
         // Generate and send OTP
@@ -85,11 +85,11 @@ public class UserService {
         user.setPhoneNumber(request.getPhoneNumber());
         user.setDateOfBirth(request.getDateOfBirth());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setConfirmPassword(request.getConfirmPassword());
         user.setRole(Role.ADMIN);
 
          userRepository.save(user);
 
-        // Generate and send OTP
         String code = String.format("%06d", new Random().nextInt(999999));
         otpStore.put(user.getEmail(), code);
         emailService.sendVerificationCode(user.getEmail(), code);
@@ -106,7 +106,6 @@ public class UserService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new ResourceNotFound("Wrong password");
         }
-//        it is needed
 
         if (!user.isVerified()) {
             throw new ResourceNotFound("Account not verified");

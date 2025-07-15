@@ -2,6 +2,7 @@ package org.springboot.trendmartecommerceplatform.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -24,5 +25,7 @@ public class RegisterRequest {
     private String phoneNumber;
     @NotBlank(message = "Please enter your Password")
     private String password;
+    @Transient
+    private String confirmPassword;
     private Date dateOfBirth;
 }

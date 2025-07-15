@@ -26,7 +26,7 @@ public class Payment {
     private String email;
     private String firstName;
     private String lastName;
-
     private LocalDateTime paymentTime;
+
 
 }
