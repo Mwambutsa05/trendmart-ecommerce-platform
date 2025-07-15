@@ -64,5 +64,10 @@ public class AuthController {
             userService.createAdmin(request);
             return ResponseEntity.ok("✅ New admin created successfully!");
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.ok("Deleted user with id " + id);
+    }
 
     }

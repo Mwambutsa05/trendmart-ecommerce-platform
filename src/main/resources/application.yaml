@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: pro
+    active: prod
 #    //default, prod
   datasource:
     driver-class-name: org.postgresql.Driver
