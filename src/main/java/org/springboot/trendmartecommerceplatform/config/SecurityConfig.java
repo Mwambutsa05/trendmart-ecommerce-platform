@@ -36,8 +36,10 @@ public class SecurityConfig {
                         .requestMatchers("/user/**").hasRole("USER")
                         .requestMatchers(
                                 "/auth/register/**",
+                                "/auth/set-admin",
                                 "/register",
                                 "/auth/login",
+                                "/auth/create",
                                 "/auth/verify-otp",
                                 "/auth/verify/**",
                                 "/",

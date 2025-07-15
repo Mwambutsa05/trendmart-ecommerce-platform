@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springboot.trendmartecommerceplatform.Product.Product;
 import org.springboot.trendmartecommerceplatform.config.EmailService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,27 +26,40 @@ public class AuthController {
         return ResponseEntity.ok(users);
     }
 
+    @PostMapping("/set-admin")
+    public ResponseEntity<Void> setAdmin () {
+            userService.setAdmin();
+            return ResponseEntity.ok().build();
+
+        }
+
+    @PostMapping("/register")
+        public ResponseEntity<String> register (@Valid @RequestBody RegisterRequest request){
+            userService.register(request);
+            return ResponseEntity.ok("User registered. OTP sent to email.");
+        }
+    }
+
     @PostMapping("/register")
     public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
          userService.register(request);
         return ResponseEntity.ok("User registered. OTP sent to email.");
     }
-
     @PostMapping("/verify-otp")
-    public ResponseEntity<String> verifyOtp(@RequestParam String email
+        public ResponseEntity<String> verifyOtp (@RequestParam String email
 
-            , @RequestParam String code) {
-        boolean verified = userService.verifyOtp(email, code);
-        if (verified) {
-            return ResponseEntity.ok("Account verified successfully.");
+                , @RequestParam String code){
+            boolean verified = userService.verifyOtp(email, code);
+            if (verified) {
+                return ResponseEntity.ok("Account verified successfully.");
+            }
+            return ResponseEntity.badRequest().body("Invalid or expired OTP.");
         }
-        return ResponseEntity.badRequest().body("Invalid or expired OTP.");
-    }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
-        AuthResponse response = userService.login(request);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<AuthResponse> login (@RequestBody LoginRequest request){
+            AuthResponse response = userService.login(request);
+            return ResponseEntity.ok(response);
     }
 
     // Admin registration endpoint (you can secure this or remove it)
@@ -73,3 +87,11 @@ public class AuthController {
 }
 
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/create-ADMIN")
+    public ResponseEntity<String> createAdmin (@RequestBody RegisterRequest request){
+            userService.createAdmin(request);
+            return ResponseEntity.ok("✅ New admin created successfully!");
+    }
+
+    }
