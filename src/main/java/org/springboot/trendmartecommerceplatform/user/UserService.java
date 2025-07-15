@@ -1,10 +1,15 @@
 package org.springboot.trendmartecommerceplatform.user;
 
 import lombok.AllArgsConstructor;
+import org.springboot.trendmartecommerceplatform.config.EmailService;
 import org.springboot.trendmartecommerceplatform.config.JwtUtil;
 import org.springboot.trendmartecommerceplatform.exceptionHandling.ResourceNotFound;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 @Service
 @AllArgsConstructor
@@ -13,8 +18,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final Map<String, String> otpStore = new HashMap<>();
+    private final EmailService emailService;
 
-    public AuthResponse register(RegisterRequest request) {
+    public User register(RegisterRequest request) {
+        if (!request.getPassword().equals(request.getPassword())) {
+            throw new ResourceNotFound("Passwords do not match");
+        }
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new ResourceNotFound("Email already exists");
         }
@@ -28,14 +38,41 @@ public class UserService {
         user.setDateOfBirth(request.getDateOfBirth());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.USER);
-        User savedUser = userRepository.save(user);
-        String token = jwtUtil.generateToken(savedUser.getEmail());
+        user.setVerified(false);
 
-        return new AuthResponse(token, savedUser.getEmail(), savedUser.getUsername(),
-                savedUser.getFirstName(), savedUser.getLastName(), savedUser.getRole().name(), savedUser.getId());
+        userRepository.save(user);
+
+        // Generate and send OTP
+        String code = String.format("%06d", new Random().nextInt(999999));
+        otpStore.put(user.getEmail(), code);
+        emailService.sendVerificationCode(user.getEmail(), code);
+
+        return user;
+
+    }
+    // 2. Verify OTP
+
+
+
+
+    public boolean verifyOtp(String email, String code) {
+        String storedOtp = otpStore.get(email);
+        if (storedOtp != null && storedOtp.equals(code)) {
+            User user = userRepository.findByEmail(email).orElseThrow();
+            user.setVerified(true);
+            user.setEnabled(true);
+            userRepository.save(user);
+            otpStore.remove(email);
+            return true;
+        }
+        return false;
     }
 
-    public AuthResponse registerAdmin(RegisterRequest request) {
+    public User registerAdmin(RegisterRequest request) {
+
+        if (!request.getPassword().equals(request.getPassword())) {
+            throw new ResourceNotFound("Passwords do not match");
+        }
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new ResourceNotFound("Email already exists");
         }
@@ -50,11 +87,16 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.ADMIN);
 
-        User savedUser = userRepository.save(user);
-        String token = jwtUtil.generateToken(savedUser.getEmail());
+         userRepository.save(user);
 
-        return new AuthResponse(token, savedUser.getEmail(), savedUser.getUsername(),
-                savedUser.getFirstName(), savedUser.getLastName(), savedUser.getRole().name(), savedUser.getId());
+        // Generate and send OTP
+        String code = String.format("%06d", new Random().nextInt(999999));
+        otpStore.put(user.getEmail(), code);
+        emailService.sendVerificationCode(user.getEmail(), code);
+
+        return user;
+
+
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -63,6 +105,11 @@ public class UserService {
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new ResourceNotFound("Wrong password");
+        }
+//        it is needed
+
+        if (!user.isVerified()) {
+            throw new ResourceNotFound("Account not verified");
         }
 
         String token = jwtUtil.generateToken(user.getEmail());
@@ -76,4 +123,5 @@ public class UserService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFound("User not found: " + email));
     }
+
 }

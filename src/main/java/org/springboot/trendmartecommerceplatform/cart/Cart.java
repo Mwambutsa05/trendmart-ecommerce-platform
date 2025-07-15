@@ -1,14 +1,18 @@
 package org.springboot.trendmartecommerceplatform.cart;
-import org.springboot.trendmartecommerceplatform.user.User;
+
 import jakarta.persistence.*;
 import lombok.*;
+import org.springboot.trendmartecommerceplatform.user.User;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+
 @Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Data
 public class Cart {
 
     @Id
@@ -23,6 +27,14 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private List<CartItem> items;
+
+    public BigDecimal getSubtotal() {
+        if (items == null || items.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+
+        return items.stream()
+                .map(CartItem::getSubtotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 }
-
-

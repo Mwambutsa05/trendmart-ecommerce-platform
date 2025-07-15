@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springboot.trendmartecommerceplatform.category.Category;
 import org.springboot.trendmartecommerceplatform.discountAds.Discount;
 import org.springboot.trendmartecommerceplatform.review.Review;
+import org.springboot.trendmartecommerceplatform.wishlist.WishlistItem;
 import org.springboot.trendmartecommerceplatform.stock.Stock;
 
 import java.math.BigDecimal;
@@ -54,6 +55,10 @@ public class Product {
     @JsonBackReference
     @JoinColumn(name = "discount_id")
     private Discount discount;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<WishlistItem> wishlistItems = new ArrayList<>();
+
 
 
     public BigDecimal getDiscountPrice() {

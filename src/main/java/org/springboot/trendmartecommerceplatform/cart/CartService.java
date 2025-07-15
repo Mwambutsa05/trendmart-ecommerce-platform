@@ -9,6 +9,7 @@ import org.springboot.trendmartecommerceplatform.user.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +32,7 @@ public class CartService {
 
         return cartRepository.findByUser_Id(userId).orElseGet(() -> {
             Cart cart = new Cart();
-            cart.setUser(user);  // Corrected: set full User object here
+            cart.setUser(user);
             cart.setCreatedAt(LocalDateTime.now());
             return cartRepository.save(cart);
         });
@@ -74,6 +75,13 @@ public class CartService {
             response.setProductName(product.getName());
             response.setQuantity(item.getQuantity());
             response.setPrice(product.getPrice());
+
+            if (product.getPrice() != null && item.getQuantity() != null) {
+                response.setSubtotal(product.getPrice().multiply(new BigDecimal(item.getQuantity())));
+            } else {
+                response.setSubtotal(BigDecimal.ZERO);
+            }
+
             return response;
         }).collect(Collectors.toList());
 
@@ -103,5 +111,21 @@ public class CartService {
         Cart cart = getOrCreateCart();
         cartItemRepository.deleteAllByCart_Id(cart.getId());
         return ResponseEntity.ok("Cart cleared successfully.");
+    }
+
+
+    public BigDecimal getCartSubtotal() {
+        Cart cart = getOrCreateCart();
+
+        List<CartItem> items = cartItemRepository.findByCart_Id(cart.getId());
+
+        return items.stream()
+                .map(item -> {
+                    if (item.getProduct() != null && item.getProduct().getPrice() != null && item.getQuantity() != null) {
+                        return item.getProduct().getPrice().multiply(new BigDecimal(item.getQuantity()));
+                    }
+                    return BigDecimal.ZERO;
+                })
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
