@@ -20,7 +20,6 @@ public class AuthController {
     private final UserService userService;
     private final EmailService emailService;
 
-
     @GetMapping()
     public ResponseEntity<List<User>> getUsers() {
         List<User> users = userService.findAll();
@@ -39,7 +38,13 @@ public class AuthController {
             userService.register(request);
             return ResponseEntity.ok("User registered. OTP sent to email.");
         }
+    }
 
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
+         userService.register(request);
+        return ResponseEntity.ok("User registered. OTP sent to email.");
+    }
     @PostMapping("/verify-otp")
         public ResponseEntity<String> verifyOtp (@RequestParam String email
 
@@ -56,6 +61,30 @@ public class AuthController {
             AuthResponse response = userService.login(request);
             return ResponseEntity.ok(response);
     }
+
+    // Admin registration endpoint (you can secure this or remove it)
+    @PostMapping("/register/admin")
+    public ResponseEntity<String> registerAdmin(@Valid @RequestBody RegisterRequest request) {
+        userService.registerAdmin(request);
+        return ResponseEntity.ok("Admin registered. OTP sent to email.");
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.ok("Deleted user with id " + id);
+    }
+//    @PostMapping("/verify/send")
+//    public ResponseEntity<String> sendCode(@RequestParam String email) {
+//        emailService .sendVerificationCode(email);
+//        return ResponseEntity.ok("Verification code sent.");
+//    }
+//    @PostMapping("/verify/check")
+//    public ResponseEntity<String> checkCode(@RequestParam String email, @RequestParam String code) {
+//        boolean isValid = emailService.verifyOtp(email, code);
+//        return isValid ? ResponseEntity.ok("Verified!") : ResponseEntity.badRequest().body("Invalid or expired code.");
+//    }
+}
 
 
     @PreAuthorize("hasRole('ADMIN')")

@@ -44,14 +44,15 @@ public class UserService {
 
         User user = new User();
         user.setFirstName(request.getFullName());
+        user.setFullName(request.getFullName());
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPhoneNumber(request.getPhoneNumber());
         user.setDateOfBirth(request.getDateOfBirth());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setConfirmPassword(request.getConfirmPassword());
         user.setRole(Role.USER);
         user.setVerified(false);
-
         userRepository.save(user);
 
         // Generate and send OTP
@@ -111,6 +112,7 @@ public void setAdmin() {
         // ✅ Create user
         User user = new User();
         user.setFirstName(request.getFullName());
+        user.setFullName(request.getFullName());
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPhoneNumber(request.getPhoneNumber());
@@ -118,12 +120,12 @@ public void setAdmin() {
 
         // ✅ Encrypt password
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setConfirmPassword(request.getConfirmPassword());
         user.setRole(Role.ADMIN);
         user.setVerified(true);
         user.setEnabled(true);
          userRepository.save(user);
 
-        // Generate and send OTP
         String code = String.format("%06d", new Random().nextInt(999999));
         otpStore.put(user.getEmail(), code);
         emailService.sendVerificationCode(user.getEmail(), code);
@@ -141,7 +143,6 @@ public void setAdmin() {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new ResourceNotFound("Wrong password");
         }
-//        it is needed
 
         if (!user.isVerified()) {
             throw new ResourceNotFound("Account not verified");
@@ -150,7 +151,9 @@ public void setAdmin() {
         String token = jwtUtil.generateToken(user.getEmail());
 
         return new AuthResponse(token, user.getEmail(), user.getUsername(),
+
                 user.getFirstName(), user.getRole().name(), user.getId());
+                user.getFullName(), user.getRole().name(), user.getId());
     }
 
 
