@@ -1,6 +1,7 @@
 package org.springboot.trendmartecommerceplatform.user;
 
 import lombok.AllArgsConstructor;
+import org.springboot.trendmartecommerceplatform.Product.Product;
 import org.springboot.trendmartecommerceplatform.config.EmailService;
 import org.springboot.trendmartecommerceplatform.config.JwtUtil;
 import org.springboot.trendmartecommerceplatform.exceptionHandling.ResourceNotFound;
@@ -8,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -21,6 +23,17 @@ public class UserService {
     private final Map<String, String> otpStore = new HashMap<>();
     private final EmailService emailService;
 
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public User deleteUser(long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFound("Product not found"));
+        userRepository.delete(user);
+        return user;
+    }
+
     public User register(RegisterRequest request) {
         if (!request.getPassword().equals(request.getPassword())) {
             throw new ResourceNotFound("Passwords do not match");
@@ -30,8 +43,7 @@ public class UserService {
         }
 
         User user = new User();
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
+        user.setFirstName(request.getFullName());
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPhoneNumber(request.getPhoneNumber());
@@ -68,25 +80,47 @@ public class UserService {
         return false;
     }
 
-    public User registerAdmin(RegisterRequest request) {
+public void setAdmin() {
+    String adminEmail = "uwamahorosonia1@gmail.com"; // the email for the default admin
+    if (userRepository.findByEmail(adminEmail).isEmpty()) {
+        User admin = new User();
+        admin.setFirstName("sonia");
+        admin.setLastName("uwamahorosonia");
+        admin.setUsername("Default-admin");
+        admin.setEmail(adminEmail);
+        admin.setPassword(passwordEncoder.encode("Rwanda123$#@")); // password for login
+        admin.setRole(Role.ADMIN);  // make them an admin
+        admin.setEnabled(true);     // can log in immediately
+        admin.setVerified(true);    // skip OTP
+        userRepository.save(admin);
 
-        if (!request.getPassword().equals(request.getPassword())) {
-            throw new ResourceNotFound("Passwords do not match");
-        }
+        System.out.println("✅ Default admin created: " + adminEmail);
+    } else {
+        System.out.println("ℹ️ Default Admin already exists: " + adminEmail);
+    }
+}
+
+
+    public User createAdmin(RegisterRequest request) {
+
+        // ✅ Check if email already exists
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new ResourceNotFound("Email already exists");
         }
 
+        // ✅ Create user
         User user = new User();
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
+        user.setFirstName(request.getFullName());
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPhoneNumber(request.getPhoneNumber());
         user.setDateOfBirth(request.getDateOfBirth());
+
+        // ✅ Encrypt password
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.ADMIN);
-
+        user.setVerified(true);
+        user.setEnabled(true);
          userRepository.save(user);
 
         // Generate and send OTP
@@ -98,6 +132,7 @@ public class UserService {
 
 
     }
+
 
     public AuthResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
@@ -115,7 +150,7 @@ public class UserService {
         String token = jwtUtil.generateToken(user.getEmail());
 
         return new AuthResponse(token, user.getEmail(), user.getUsername(),
-                user.getFirstName(), user.getLastName(), user.getRole().name(), user.getId());
+                user.getFirstName(), user.getRole().name(), user.getId());
     }
 
 
