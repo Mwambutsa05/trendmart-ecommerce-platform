@@ -13,10 +13,8 @@ import java.util.Date;
 @Data
 public class RegisterRequest {
     @NotBlank(message = "Please enter your first name")
-    private String firstName;
+    private String FullName;
     @NotBlank(message = "Please enter your last name")
-    private String lastName;
-    @NotBlank(message = "Please enter your username")
     private String username;
     @Email
     @Column(unique = true)
