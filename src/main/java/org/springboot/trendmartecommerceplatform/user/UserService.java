@@ -1,6 +1,7 @@
 package org.springboot.trendmartecommerceplatform.user;
 
 import lombok.AllArgsConstructor;
+import org.springboot.trendmartecommerceplatform.Product.Product;
 import org.springboot.trendmartecommerceplatform.config.EmailService;
 import org.springboot.trendmartecommerceplatform.config.JwtUtil;
 import org.springboot.trendmartecommerceplatform.exceptionHandling.ResourceNotFound;
@@ -8,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -20,6 +22,17 @@ public class UserService {
     private final JwtUtil jwtUtil;
     private final Map<String, String> otpStore = new HashMap<>();
     private final EmailService emailService;
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public User deleteUser(long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFound("Product not found"));
+        userRepository.delete(user);
+        return user;
+    }
 
     public User register(RegisterRequest request) {
         if (!request.getPassword().equals(request.getPassword())) {

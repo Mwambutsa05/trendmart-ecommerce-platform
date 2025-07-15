@@ -3,9 +3,12 @@ package org.springboot.trendmartecommerceplatform.user;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springboot.trendmartecommerceplatform.Product.Product;
 import org.springboot.trendmartecommerceplatform.config.EmailService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000",  allowCredentials = "true")
 @RestController
@@ -16,12 +19,18 @@ public class AuthController {
     private final UserService userService;
     private final EmailService emailService;
 
+    @GetMapping()
+    public ResponseEntity<List<User>> getUsers() {
+        List<User> users = userService.findAll();
+        return ResponseEntity.ok(users);
+    }
+
     @PostMapping("/register")
     public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
          userService.register(request);
         return ResponseEntity.ok("User registered. OTP sent to email.");
     }
-    // 2. Verify OTP
+
     @PostMapping("/verify-otp")
     public ResponseEntity<String> verifyOtp(@RequestParam String email
 
@@ -44,6 +53,12 @@ public class AuthController {
     public ResponseEntity<String> registerAdmin(@Valid @RequestBody RegisterRequest request) {
         userService.registerAdmin(request);
         return ResponseEntity.ok("Admin registered. OTP sent to email.");
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.ok("Deleted user with id " + id);
     }
 //    @PostMapping("/verify/send")
 //    public ResponseEntity<String> sendCode(@RequestParam String email) {
