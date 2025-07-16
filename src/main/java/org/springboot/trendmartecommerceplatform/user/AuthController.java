@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000",  allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "https://trend-mart-frontend-blue.vercel.app"},  allowedHeaders = "*",
+        allowCredentials = "true",
+        maxAge = 3600 )
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -64,6 +66,7 @@ public class AuthController {
             userService.createAdmin(request);
             return ResponseEntity.ok("✅ New admin created successfully!");
     }
+//    needed
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         userService.deleteUser(id);
