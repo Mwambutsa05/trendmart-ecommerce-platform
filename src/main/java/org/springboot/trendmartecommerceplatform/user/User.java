@@ -30,21 +30,23 @@ public class User implements UserDetails {
 
     private String firstName;
     private String lastName;
+    private String fullName;
     private String username;
     private String email;
     private String phoneNumber;
     private String password;
+    private String confirmPassword;
     private Date dateOfBirth;
     private boolean verified;
 
     
 
 
-    private boolean enabled = false; // Control activation
+    private boolean enabled = false;
 
 
     @Enumerated(EnumType.STRING)
-    private Role role = Role.USER; // Default role
+    private Role role = Role.USER;
 
 
 
