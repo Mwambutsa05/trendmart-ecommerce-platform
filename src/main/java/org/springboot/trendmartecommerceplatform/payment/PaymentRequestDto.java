@@ -11,6 +11,7 @@ public class PaymentRequestDto {
     private String email;
     private String firstName;
     private String lastName;
-    private int    amount;
+    private int amount;
     private String currency;
+    private Long orderId;
 }

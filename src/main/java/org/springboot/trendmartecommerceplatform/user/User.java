@@ -49,9 +49,6 @@ public class User implements UserDetails {
     private Role role = Role.USER;
 
 
-
-    // === Spring Security ===
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role));
@@ -64,7 +61,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true; // You can add a field later to control this
+        return true;
     }
 
     @Override

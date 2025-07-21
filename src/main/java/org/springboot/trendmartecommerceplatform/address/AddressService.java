@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springboot.trendmartecommerceplatform.exceptionHandling.ResourceNotFound;
 import org.springboot.trendmartecommerceplatform.user.User;
 import org.springboot.trendmartecommerceplatform.user.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
 @AllArgsConstructor
 @Service
 public class AddressService {
@@ -12,7 +15,16 @@ public class AddressService {
     private final UserRepository userRepository;
 
     public Address createAddress(AddressDto Dtoo) {
-        User user = userRepository.findById(Dtoo.getUserId()).orElseThrow(() -> new ResourceNotFound("User not found"));
+        System.out.println("Service method started");
+        // Get authenticated user from JWT token instead of using userId from payload
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName(); // This should be the email from JWT
+
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFound("User not found"));
+
+        System.out.println("User retrival line reached");
+
         Address address = new Address();
         address.setUser(user);
         address.setStreet(Dtoo.getStreet());
@@ -21,16 +33,21 @@ public class AddressService {
         address.setPostalCode(Dtoo.getPostalCode());
         address.setCountry(Dtoo.getCountry());
         address.setIsDefault(Dtoo.getIsDefault());
-         return addressRepository.save(address);
+
+        System.out.println("Cant add address");
+
+        return addressRepository.save(address);
     }
+
     public Address getByUserId(Long userId) {
         return addressRepository.findByUserId(userId).orElseThrow(() -> new ResourceNotFound("User not found"));
-
     }
-    public Address getById(Long id)  {
+
+    public Address getById(Long id) {
         return addressRepository.findById(id).orElseThrow(() -> new ResourceNotFound("Address not found"));
     }
-    public Address updateAddress(Long id,AddressDto Dtoo) {
+
+    public Address updateAddress(Long id, AddressDto Dtoo) {
         Address updateAddress = addressRepository.findById(id).orElseThrow(() -> new ResourceNotFound("Address not found"));
         updateAddress.setStreet(Dtoo.getStreet());
         updateAddress.setCity(Dtoo.getCity());
@@ -39,12 +56,10 @@ public class AddressService {
         updateAddress.setCountry(Dtoo.getCountry());
         updateAddress.setIsDefault(Dtoo.getIsDefault());
         return addressRepository.save(updateAddress);
-
-
     }
-    public void  deleteAddress(Long id) {
+
+    public void deleteAddress(Long id) {
         Address deleteAddress = addressRepository.findById(id).orElseThrow(() -> new ResourceNotFound("Address not found"));
         addressRepository.delete(deleteAddress);
     }
-
 }

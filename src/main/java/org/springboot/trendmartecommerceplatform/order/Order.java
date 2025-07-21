@@ -2,6 +2,7 @@ package org.springboot.trendmartecommerceplatform.order;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springboot.trendmartecommerceplatform.payment.Payment;
 import org.springboot.trendmartecommerceplatform.trackingOrder.OrderStatus;
 import org.springboot.trendmartecommerceplatform.trackingOrder.OrderTracking;
 import org.springboot.trendmartecommerceplatform.user.User;
@@ -47,5 +48,8 @@ public class Order {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderTracking> trackingEvents = new ArrayList<>();
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
 
 }
