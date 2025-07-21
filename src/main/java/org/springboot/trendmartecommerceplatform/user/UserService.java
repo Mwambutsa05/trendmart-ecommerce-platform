@@ -117,6 +117,37 @@ public class UserService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new ResourceNotFound("Wrong password");
         }
+        user.setConfirmPassword(request.getConfirmPassword());
+public void setAdmin() {
+    String adminEmail = "uwamahorosonia1@gmail.com"; // the email for the default admin
+    if (userRepository.findByEmail(adminEmail).isEmpty()) {
+        User admin = new User();
+        admin.setFirstName("sonia");
+        admin.setLastName("uwamahorosonia");
+        admin.setUsername("Default-admin");
+        admin.setEmail(adminEmail);
+        admin.setPassword(passwordEncoder.encode("Rwanda123$#@")); // password for login
+        admin.setRole(Role.ADMIN);  // make them an admin
+        admin.setEnabled(true);     // can log in immediately
+        admin.setVerified(true);    // skip OTP
+        userRepository.save(admin);
+        System.out.println("✅ Default admin created: " + adminEmail);
+    } else {
+        System.out.println("ℹ️ Default Admin already exists: " + adminEmail);
+    }
+}
+
+
+    public User createAdmin(RegisterRequest request) {
+
+        // ✅ Check if email already exists
+        // ✅ Create user
+        user.setFirstName(request.getFullName());
+
+        // ✅ Encrypt password
+        user.setConfirmPassword(request.getConfirmPassword());
+        user.setVerified(true);
+        user.setEnabled(true);
 
         if (!user.isVerified()) {
             throw new ResourceNotFound("Account not verified");
