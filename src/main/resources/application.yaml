@@ -1,12 +1,13 @@
 spring:
-  profiles:
-    active: default
-  #    //default, prod
+  config:
+    activate:
+      on-profile:default
+        #default,prod
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/TrendMart_EcommercePlatform
-    password: Alice@123
     username: postgres
+    password: Alice@123
   jpa:
     hibernate:
       ddl-auto: validate
@@ -14,21 +15,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  flyway:
+    baseline-on-migrate: true
 
-  mail:
-    host: smtp.gmail.com
-    username: uwamahorosonia1@gmail.com
-    password: lrsi qjwm hxkz gzfr
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-    port: 8080
-  server:
-    port=8081:
-
-flutterwave:
-  secret-key:
-  base-url:
+logging:
+  level:
+    com.zaxxer.hikari: DEBUG
+#   org.springframework.jdbc.datasource: DEBUG
