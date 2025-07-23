@@ -1,7 +1,6 @@
 package org.springboot.trendmartecommerceplatform.user;
 
 import lombok.AllArgsConstructor;
-import org.springboot.trendmartecommerceplatform.Product.Product;
 import org.springboot.trendmartecommerceplatform.config.EmailService;
 import org.springboot.trendmartecommerceplatform.config.JwtUtil;
 import org.springboot.trendmartecommerceplatform.exceptionHandling.ResourceNotFound;
@@ -29,13 +28,14 @@ public class UserService {
 
     public User deleteUser(long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFound("Product not found"));
+                .orElseThrow(() -> new ResourceNotFound("User not found"));
         userRepository.delete(user);
         return user;
     }
 
     public User register(RegisterRequest request) {
-        if (!request.getPassword().equals(request.getPassword())) {
+        // Fix: Compare password with confirmPassword, not password with itself
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
             throw new ResourceNotFound("Passwords do not match");
         }
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
@@ -52,6 +52,7 @@ public class UserService {
         user.setConfirmPassword(request.getConfirmPassword());
         user.setRole(Role.USER);
         user.setVerified(false);
+        user.setEnabled(false);
         userRepository.save(user);
         String code = String.format("%06d", new Random().nextInt(999999));
         otpStore.put(user.getEmail(), code);
@@ -75,11 +76,27 @@ public class UserService {
         return false;
     }
 
-    public User registerAdmin(RegisterRequest request) {
+    public void setAdmin() {
+        String adminEmail = "uwamahorosonia1@gmail.com";
+        if (userRepository.findByEmail(adminEmail).isEmpty()) {
+            User admin = new User();
+            admin.setFirstName("sonia");
+            admin.setLastName("uwamahorosonia");
+            admin.setUsername("Default-admin");
+            admin.setEmail(adminEmail);
+            admin.setPassword(passwordEncoder.encode("Rwanda123$#@"));
+            admin.setRole(Role.ADMIN);
+            admin.setEnabled(true);
+            admin.setVerified(true);
+            userRepository.save(admin);
 
-        if (!request.getPassword().equals(request.getPassword())) {
-            throw new ResourceNotFound("Passwords do not match");
+            System.out.println("✅ Default admin created: " + adminEmail);
+        } else {
+            System.out.println("ℹ️ Default Admin already exists: " + adminEmail);
         }
+    }
+
+    public User createAdmin(RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new ResourceNotFound("Email already exists");
         }
@@ -93,16 +110,15 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setConfirmPassword(request.getConfirmPassword());
         user.setRole(Role.ADMIN);
-
-         userRepository.save(user);
+        user.setVerified(true);
+        user.setEnabled(true);
+        userRepository.save(user);
 
         String code = String.format("%06d", new Random().nextInt(999999));
         otpStore.put(user.getEmail(), code);
         emailService.sendVerificationCode(user.getEmail(), code);
 
         return user;
-
-
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -123,10 +139,8 @@ public class UserService {
                 user.getFullName(), user.getRole().name(), user.getId());
     }
 
-
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFound("User not found: " + email));
     }
-
 }
