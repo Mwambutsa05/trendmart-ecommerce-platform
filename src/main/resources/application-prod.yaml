@@ -22,4 +22,3 @@ spring:
 flutterwave:
   secret-key: ${FLUTTERWAVE_SECRET_KEY}
   base-url: ${FLUTTERWAVE_BASE_URL}
-

@@ -2,8 +2,6 @@ package org.springboot.trendmartecommerceplatform.user;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.springboot.trendmartecommerceplatform.Product.Product;
 import org.springboot.trendmartecommerceplatform.config.EmailService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,30 +20,21 @@ public class AuthController {
     private final UserService userService;
     private final EmailService emailService;
 
-
     @GetMapping()
     public ResponseEntity<List<User>> getUsers() {
         List<User> users = userService.findAll();
         return ResponseEntity.ok(users);
     }
 
-    @PostMapping("/set-admin")
-    public ResponseEntity<Void> setAdmin () {
-            userService.setAdmin();
-            return ResponseEntity.ok().build();
-
-        }
-
     @PostMapping("/register")
-        public ResponseEntity<String> register (@Valid @RequestBody RegisterRequest request){
-            userService.register(request);
-            return ResponseEntity.ok("User registered. OTP sent to email.");
-        }
+    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
+         userService.register(request);
+        return ResponseEntity.ok("User registered. OTP sent to email.");
+    }
 
     @PostMapping("/verify-otp")
         public ResponseEntity<String> verifyOtp (@RequestParam String email
-
-                , @RequestParam String code){
+            , @RequestParam String code){
             boolean verified = userService.verifyOtp(email, code);
             if (verified) {
                 return ResponseEntity.ok("Account verified successfully.");
@@ -66,11 +55,7 @@ public class AuthController {
             userService.createAdmin(request);
             return ResponseEntity.ok("✅ New admin created successfully!");
     }
-//    needed
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.ok("Deleted user with id " + id);
-    }
 
-    }
+}
+
+

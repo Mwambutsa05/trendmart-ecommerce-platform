@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// PaymentResponseDto.java
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,3 +14,5 @@ public class PaymentResponseDto {
     private String txRef;
     private String message;
 }
+
+

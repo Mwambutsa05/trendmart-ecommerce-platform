@@ -8,8 +8,6 @@ import lombok.Data;
 
 @Data
 public class LoginRequest {
-    @NotBlank(message = "Please enter your username")
-    private String username;
     @Email
     @Column(unique = true)
     private String email;
