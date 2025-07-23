@@ -16,9 +16,8 @@ public class AddressService {
 
     public Address createAddress(AddressDto Dtoo) {
         System.out.println("Service method started");
-        // Get authenticated user from JWT token instead of using userId from payload
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userEmail = authentication.getName(); // This should be the email from JWT
+        String userEmail = authentication.getName(); 
 
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFound("User not found"));

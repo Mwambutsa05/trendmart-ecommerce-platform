@@ -23,5 +23,4 @@ public class AddressDto {
 
     private Boolean isDefault = false;
 
-    // userId removed - it will come from JWT token
 }

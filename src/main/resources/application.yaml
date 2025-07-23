@@ -3,7 +3,7 @@ spring:
 
 
     active: prod
-#    //default, prod
+#  default, prod
 
   datasource:
     driver-class-name: org.postgresql.Driver

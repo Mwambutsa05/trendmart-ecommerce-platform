@@ -53,8 +53,6 @@ public class UserService {
         user.setRole(Role.USER);
         user.setVerified(false);
         userRepository.save(user);
-
-        // Generate and send OTP
         String code = String.format("%06d", new Random().nextInt(999999));
         otpStore.put(user.getEmail(), code);
         emailService.sendVerificationCode(user.getEmail(), code);
@@ -62,9 +60,6 @@ public class UserService {
         return user;
 
     }
-    // 2. Verify OTP
-
-
 
 
     public boolean verifyOtp(String email, String code) {
